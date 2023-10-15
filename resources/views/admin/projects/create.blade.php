@@ -89,15 +89,24 @@
             @enderror --}}
           </div>
           <div class="col-6">
-            <label class="fw-bold" for="name">{{__('Release date')}}</label>
-            <input class="form-control" type="date" name="release">
-            {{-- @error('date')
-            <span class="invalid-feedback" role="alert">
-              <strong>{{ $errors->get('date')}}</strong>
-            </span>
-            @enderror --}}
+            <label for="form-select" class="fw-bold">Project technologies</label>
+            <select class="form-select" name="technologies[]">
+              <option selected disabled hidden>Select one of the following technologies</option>
+              @foreach ($technologies as $singleTechnology)
+                <option value="{{ $singleTechnology->id }}">{{ $singleTechnology->name }}</option>
+              @endforeach
+            </select>
           </div>
         </div>
+      </div>
+      <div class="col-12">
+        <label class="fw-bold" for="name">{{__('Release date')}}</label>
+        <input class="form-control" type="date" name="release">
+        {{-- @error('date')
+        <span class="invalid-feedback" role="alert">
+          <strong>{{ $errors->get('date')}}</strong>
+        </span>
+        @enderror --}}
       </div>
       <div class="mb-4 pt-2">
         <button type="submit" class="btn btn-primary btn-lg">Post the project!</button>

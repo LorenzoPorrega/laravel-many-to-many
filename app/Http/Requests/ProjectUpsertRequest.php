@@ -34,6 +34,7 @@ class ProjectUpsertRequest extends FormRequest
 			/* "language" => "required|string", */
 			// Exists makes sure that the passed types_id is present in the types table to be inputted in the projects table
 			"type_id" => "required|exists:types,id",
+			"technologies"=> "nullable",
 			"link" => "required|string",
 			"description" => "required|string",
 			"thumb" => "nullable|image|max:10240",

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectUpsertRequest;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -51,8 +52,9 @@ class ProjectController extends Controller{
 
   public function create(){
     $types = Type::all(); 
+    $technologies = Technology::all();
     // with compact I can pass an argument (being an array, a variable, etc) to a view
-    return view("admin.projects.create", compact("types"));
+    return view("admin.projects.create", compact("types", "technologies"));
   }
 
 
@@ -91,6 +93,10 @@ class ProjectController extends Controller{
 
     $project = Project::create($data);
 
+    if (key_exists("technologies", $data)) {
+      $project->technologies()->attach($data["technologies"]);
+  }
+
     // return the show route with the id as the new project's id
     return redirect()->route("admin.projects.show", $project->slug);
   }
@@ -99,7 +105,9 @@ class ProjectController extends Controller{
   public function edit($slug){
     $project = Project::where("slug", $slug)->firstOrFail();
     $types = Type::all();
-    return view("admin.projects.edit", compact("project", "types"));
+    $technologies = Technology::all();
+
+    return view("admin.projects.edit", compact("project", "types", "technologies"));
   }
 
 
@@ -141,6 +149,8 @@ class ProjectController extends Controller{
       // I save the file in filesystem
       $data["thumb"] = Storage::put("projects", $data["thumb"]);
     }
+
+    $project->technologies()->sync($data["technologies"]);
 
     $project->update($data);
 
